@@ -1,0 +1,43 @@
+version: '3'
+services:
+    redis:
+        image: redis:6
+        container_name: redis
+        restart: always
+        networks:
+            - spring
+        ports:
+            - 6379:6379
+        volumes:
+            - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+            - ./redis/db/:/data/           
+        command: redis-server /usr/local/etc/redis/redis.conf
+
+    mysql:
+        image: mysql:8
+        container_name: mysql
+        networks:
+            - spring
+        restart: always
+        ports:
+            - 33060:33060
+            - 3306:3306
+        volumes:
+            - ./mysql/db:/var/lib/mysql
+            - ./mysql/conf.d:/etc/mysql/conf.d
+        environment:
+            - MYSQL_ROOT_PASSWORD=123zxc    
+        command: --default-authentication-plugin=mysql_native_password
+
+    app-back:
+        image: ffzs/app-back:v1
+        container_name: app-back
+        restart: always
+        networks:
+            - spring
+        ports:
+            - 8080:8080
+            - 8081:8081
+
+networks:
+    spring:
