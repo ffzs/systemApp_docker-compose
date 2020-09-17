@@ -39,5 +39,16 @@ services:
             - 8080:8080
             - 8081:8081
 
+    ngnix:
+        image: ngnix:1.19
+        container_name: ngnix
+        restart: always
+        networks:
+            - spring
+        ports:
+            - 80:80
+        volumes:
+            - ./ngnix/ngnix.conf:/etc/nginx/ningx.conf
+
 networks:
     spring:
